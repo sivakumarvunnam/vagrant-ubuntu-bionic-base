@@ -12,7 +12,7 @@ SSH into the machine:
     
 On any problems with provisioning run:
 
-    vagrant provision --provision-with "install-software"
+    vagrant provision --provision-with "install-bootstrap"
 
 Stop machine with:
 
