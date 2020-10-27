@@ -56,8 +56,40 @@ function installJava() {
   fi
 }
 
+function installKubectl() {
+    if ! [ -x "$(command -v kubectl)" ]; then
+    echo "Instaling Kubernetes KinD..."
+    curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+    chmod +x ./kubectl
+    sudo mv ./kubectl /usr/local/bin/kubectl
+    kubectl version --client
+  fi
+}
+
+function installKind() {
+    if ! [ -x "$(command -v kind)" ]; then
+    echo "Instaling Kubernetes KinD..."
+    curl -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-$(uname)-amd64
+    chmod +x ./kind
+    sudo mv ./kind /usr/local/bin/kind
+    kind --version
+  fi
+}
+
+function createKindCluster() {
+    if [ -x "$(command -v kind)" ]; then
+    echo "Create Kubernetes KinD Cluster..."
+    curl -Lo ./cluster.yaml https://raw.githubusercontent.com/sivakumarvunnam/Dockerizing-PythonFlask-App/master/cluster.yaml
+    chmod +x ./cluster.yaml
+    kind create cluster --config ./cluster.yaml --name cluster
+  fi
+}
+
 installDocker
 installDockerCompose
 installAwsCli
 installAnsible
 installJava
+installKubectl
+installKind
+createKindCluster
